@@ -5,7 +5,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 from kafka import KafkaProducer
 from threading import Thread
-from app.udaconnect.services import KafkaService
 
 db = SQLAlchemy()
 
@@ -15,6 +14,7 @@ KAFKA_SERVER = 'kafka-service:9094'
 def create_app(env=None):
     from app.config import config_by_name
     from app.routes import register_routes
+    from app.udaconnect.services import KafkaService
 
     app = Flask(__name__)
     app.config.from_object(config_by_name[env or "test"])
@@ -37,9 +37,9 @@ def create_app(env=None):
         # in other parts of our application
         g.kafka_producer = producer
 
-    return app
-
-def run_consumer(app):
     # Run Kafka consumer in a separate thread
-    consumer_thread = Thread(target=KafkaService.run_locations_consumer(TOPIC_NAME, KAFKA_SERVER), args=app.app_context())
+    consumer_thread = Thread(target=KafkaService.run_locations_consumer, args=app.app_context())
     consumer_thread.start()
+
+    return app
+    

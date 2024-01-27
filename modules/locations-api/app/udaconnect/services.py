@@ -62,12 +62,15 @@ class LocationService:
 
 class KafkaService:
     @staticmethod
-    def run_locations_consumer(topic_name, kafka_server):
+    def run_locations_consumer():
         print("running locations consumer")
 
         sys.stdout.flush()
 
-        locations_consumer = KafkaConsumer(topic_name, bootstrap_servers=kafka_server)
+        TOPIC_NAME = 'locations'
+        KAFKA_SERVER = 'kafka-service:9094'
+
+        locations_consumer = KafkaConsumer(TOPIC_NAME, bootstrap_servers=KAFKA_SERVER)
 
         for location in locations_consumer:
             payload = json.loads(location.value)
