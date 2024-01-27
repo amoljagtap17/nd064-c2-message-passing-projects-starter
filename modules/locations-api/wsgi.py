@@ -6,4 +6,4 @@ app = create_app(os.getenv("FLASK_ENV") or "test")
 
 if __name__ == "__main__":
     app.run(debug=True)
-    run_consumer()
+    run_consumer(app)
