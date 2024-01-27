@@ -1,7 +1,7 @@
 from app.udaconnect.models import Location
 from app.udaconnect.schemas import LocationSchema
 from app.udaconnect.services import LocationService
-from flask import request
+from flask import request, Response
 from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource
 from typing import List
@@ -20,8 +20,10 @@ class LocationResource(Resource):
     @responds(schema=LocationSchema)
     def post(self) -> Location:
         payload = request.get_json()
-        new_location: Location = LocationService.create(payload)
-        return new_location
+        # new_location: Location = LocationService.create(payload)
+        # return new_location
+        LocationService.create(payload)
+        return Response(status=202)
 
     @responds(schema=LocationSchema, many=True)
     def get(self) -> List[Location]:

@@ -10,6 +10,7 @@ from kafka import KafkaConsumer
 
 from flask import g
 import json
+import sys
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("locations-api")
@@ -42,6 +43,10 @@ class LocationService:
         kafka_producer = g.kafka_producer
         kafka_producer.send("locations", kafka_data)
         kafka_producer.flush()
+
+        print("sent to kafka topic")
+
+        sys.stdout.flush()
     
     @staticmethod
     def execute_locations_consumer(location: Dict) -> Location:
@@ -58,11 +63,17 @@ class LocationService:
 class KafkaService:
     @staticmethod
     def run_locations_consumer(topic_name, kafka_server):
+        print("running locations consumer")
+
+        sys.stdout.flush()
+
         locations_consumer = KafkaConsumer(topic_name, bootstrap_servers=kafka_server)
 
         for location in locations_consumer:
             payload = json.loads(location.value)
 
             print("location payload :: " + str(payload))
+
+            sys.stdout.flush()
 
             LocationService.execute_locations_consumer(payload)
