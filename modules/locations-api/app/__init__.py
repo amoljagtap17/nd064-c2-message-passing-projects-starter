@@ -4,7 +4,6 @@ from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
 
 from kafka import KafkaProducer
-from app.udaconnect.services import KafkaService
 
 db = SQLAlchemy()
 
@@ -23,8 +22,6 @@ def create_app(env=None):
 
     register_routes(api, app)
     db.init_app(app)
-
-    KafkaService.run_locations_consumer(TOPIC_NAME, KAFKA_SERVER)
 
     @app.route("/health")
     def health():
