@@ -1,5 +1,5 @@
 import logging
-from typing import Dict
+from typing import Dict, List
 
 from app import db
 from app.udaconnect.models import Location
@@ -21,6 +21,10 @@ class LocationService:
         # Rely on database to return text form of point to reduce overhead of conversion in app code
         location.wkt_shape = coord_text
         return location
+    
+    @staticmethod
+    def retrieve_all() -> List[Location]:
+        return db.session.query(Location).all()
 
     @staticmethod
     def create(location: Dict) -> Location:
