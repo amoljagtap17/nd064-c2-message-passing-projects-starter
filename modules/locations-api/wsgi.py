@@ -7,6 +7,7 @@ TOPIC_NAME = 'locations'
 KAFKA_SERVER = 'kafka-service:9094'
 
 app = create_app(os.getenv("FLASK_ENV") or "test")
-KafkaService.run_locations_consumer(TOPIC_NAME, KAFKA_SERVER)
+
 if __name__ == "__main__":
     app.run(debug=True)
+    KafkaService.run_locations_consumer(TOPIC_NAME, KAFKA_SERVER)
