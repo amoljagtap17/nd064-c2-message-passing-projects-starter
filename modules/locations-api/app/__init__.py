@@ -4,6 +4,8 @@ from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
 
 from kafka import KafkaProducer
+from threading import Thread
+from app.udaconnect.services import KafkaService
 
 db = SQLAlchemy()
 
@@ -36,3 +38,8 @@ def create_app(env=None):
         g.kafka_producer = producer
 
     return app
+
+def run_consumer():
+    # Run Kafka consumer in a separate thread
+    consumer_thread = Thread(target=KafkaService.run_locations_consumer(TOPIC_NAME, KAFKA_SERVER))
+    consumer_thread.start()
