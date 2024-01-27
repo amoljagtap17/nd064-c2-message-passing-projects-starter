@@ -6,6 +6,9 @@ from app.udaconnect.models import Location
 from app.udaconnect.schemas import LocationSchema
 from geoalchemy2.functions import ST_AsText, ST_Point
 
+from kafka import KafkaConsumer
+import json
+
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("locations-api")
 
@@ -41,3 +44,16 @@ class LocationService:
         db.session.commit()
 
         return new_location
+    
+
+class KafkaService:
+    @staticmethod
+    def run_locations_consumer(topic_name, kafka_server):
+        locations_consumer = KafkaConsumer(topic_name, bootstrap_servers=kafka_server)
+
+        for location in locations_consumer:
+            payload = json.loads(location.value)
+
+            print("location payload :: " + str(payload))
+
+            LocationService.create(payload)

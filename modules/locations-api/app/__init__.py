@@ -1,10 +1,15 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, g
 from flask_cors import CORS
 from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
 
+from kafka import KafkaProducer
+from app.udaconnect.services import KafkaService
+
 db = SQLAlchemy()
 
+TOPIC_NAME = 'locations'
+KAFKA_SERVER = 'kafka-service:9094'
 
 def create_app(env=None):
     from app.config import config_by_name
@@ -19,8 +24,18 @@ def create_app(env=None):
     register_routes(api, app)
     db.init_app(app)
 
+    KafkaService.run_locations_consumer(TOPIC_NAME, KAFKA_SERVER)
+
     @app.route("/health")
     def health():
         return jsonify("healthy")
+    
+    @app.before_request
+    def before_request():
+        # Set up a Kafka producer
+        producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
+        # Setting Kafka to g enables us to use this
+        # in other parts of our application
+        g.kafka_producer = producer
 
     return app
