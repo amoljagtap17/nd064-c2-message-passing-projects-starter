@@ -7,6 +7,8 @@ from app.udaconnect.schemas import LocationSchema
 from geoalchemy2.functions import ST_AsText, ST_Point
 
 from kafka import KafkaConsumer
+
+from flask import g
 import json
 
 logging.basicConfig(level=logging.WARNING)
@@ -36,6 +38,13 @@ class LocationService:
             logger.warning(f"Unexpected data format in payload: {validation_results}")
             raise Exception(f"Invalid payload: {validation_results}")
 
+        kafka_data = json.dumps(location).encode()
+        kafka_producer = g.kafka_producer
+        kafka_producer.send("locations", kafka_data)
+        kafka_producer.flush()
+    
+    @staticmethod
+    def execute_locations_consumer(location: Dict) -> Location:
         new_location = Location()
         new_location.person_id = location["person_id"]
         new_location.creation_time = location["creation_time"]
@@ -56,4 +65,4 @@ class KafkaService:
 
             print("location payload :: " + str(payload))
 
-            LocationService.create(payload)
+            LocationService.execute_locations_consumer(payload)
