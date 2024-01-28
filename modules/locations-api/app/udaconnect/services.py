@@ -62,7 +62,7 @@ class LocationService:
 
 class KafkaService:
     @staticmethod
-    def run_locations_consumer():
+    def run_locations_consumer(app_context):
         print("running locations consumer")
 
         sys.stdout.flush()
@@ -79,4 +79,5 @@ class KafkaService:
 
             sys.stdout.flush()
 
-            LocationService.execute_locations_consumer(payload)
+            with app_context:
+                LocationService.execute_locations_consumer(payload)

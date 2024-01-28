@@ -38,7 +38,7 @@ def create_app(env=None):
         g.kafka_producer = producer
 
     # Run Kafka consumer in a separate thread
-    consumer_thread = Thread(target=KafkaService.run_locations_consumer, args=app.app_context())
+    consumer_thread = Thread(target=KafkaService.run_locations_consumer, args=(app.app_context(),), daemon=True)
     consumer_thread.start()
 
     return app
