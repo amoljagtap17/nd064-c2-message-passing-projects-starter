@@ -30,6 +30,15 @@ spec:
       labels:
         service: locations-api
     spec:
+      initContainers:
+        - name: wait-for-kafka
+          image: busybox
+          command:
+            [
+              "sh",
+              "-c",
+              "until nc -z -w 2 kafka-service 9094; do sleep 2; done",
+            ]
       containers:
         - image: dockerhub4aj/locations-api:latest
           name: locations-api
