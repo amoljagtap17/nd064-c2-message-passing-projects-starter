@@ -6,10 +6,10 @@ metadata:
   name: locations-grpc-server
 spec:
   ports:
-    - name: "5000"
-      port: 5000
-      targetPort: 5000
-      nodePort: 30003
+    - name: "5005"
+      port: 5005
+      targetPort: 5005
+      nodePort: 30006
   selector:
     service: locations-grpc-server
   type: NodePort
@@ -30,6 +30,15 @@ spec:
       labels:
         service: locations-grpc-server
     spec:
+      initContainers:
+        - name: wait-for-kafka
+          image: busybox
+          command:
+            [
+              "sh",
+              "-c",
+              "until nc -z -w 2 kafka-service 9094; do sleep 2; done",
+            ]
       containers:
         - image: dockerhub4aj/locations-grpc-server:latest
           name: locations-grpc-server
