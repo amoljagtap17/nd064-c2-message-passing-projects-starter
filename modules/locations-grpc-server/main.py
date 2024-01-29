@@ -5,11 +5,19 @@ import grpc
 import location_pb2
 import location_pb2_grpc
 
+import json
+from kafka import KafkaProducer
+
+TOPIC_NAME = 'locations'
+KAFKA_SERVER = 'kafka-service:9094'
+
+kafka_producer = KafkaProducer(bootstrap_servers=KAFKA_SERVER)
+
 class LocationServicer(location_pb2_grpc.LocationServiceServicer):
     def Create(self, request, context):
         print("Received location message!")
 
-        request_value = {
+        payload = {
             "id": request.id,
             "person_id": request.person_id,
             "longitude": request.longitude,
@@ -17,9 +25,13 @@ class LocationServicer(location_pb2_grpc.LocationServiceServicer):
             "creation_time": request.creation_time,
         }
 
-        print(request_value)
+        print(payload)
 
-        return location_pb2.LocationMessage(**request_value)
+        kafka_data = json.dumps(payload).encode()
+        kafka_producer.send(TOPIC_NAME, kafka_data)
+        kafka_producer.flush()
+
+        return location_pb2.LocationMessage(**payload)
 
 # Initialize gRPC server
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
