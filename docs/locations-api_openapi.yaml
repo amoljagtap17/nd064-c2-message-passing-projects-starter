@@ -1,0 +1,79 @@
+openapi: 3.0.0
+info:
+  description: API for creating locations
+  version: "1.0.0"
+  title: Locations Service API
+paths:
+  /api/locations:
+    get:
+      summary: Retrieves all locations
+      description: Retrieves all the locations
+      responses:
+        "200":
+          description: returns all locations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LocationSchema"
+    post:
+      summary: Adds a new location
+      description: Creates a new location by producing new Kafka message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LocationSchema"
+        description: Location that needs to be created
+      responses:
+        "202":
+          description: Accepted
+        "400":
+          description: "Invalid input, object invalid"
+  /api/locations/{location_id}:
+    get:
+      summary: Retrieve an location
+      description: By passing in an item_id you can retrieve the items information
+      parameters:
+        - in: path
+          name: location_id
+          schema:
+            type: string
+          required: true
+          description: Unique ID for a given Location
+      responses:
+        "200":
+          description: Successfully return a location
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LocationSchema"
+        "404":
+          description: Requested item ID was not found
+components:
+  schemas:
+    LocationSchema:
+      type: object
+      required:
+        - person_id
+        - longitude
+        - latitude
+        - creation_time
+      properties:
+        id:
+          type: string
+          example: 1
+        person_id:
+          type: integer
+          example: 5
+        longitude:
+          type: string
+          example: "37.5536299999999983"
+        latitude:
+          type: string
+          example: "-122.2908829999999938"
+        creation_time:
+          type: string
+          format: date-time
+          example: "2024-01-29"
