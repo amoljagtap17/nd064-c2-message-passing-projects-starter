@@ -1,0 +1,7 @@
+For creating new 'location' using GRPC, follow the following steps:
+
+1. Run all the Kubernetes resources as described in README.md file
+2. Considering 'python' is installed on your system, run the file 'writer.py' from 'modules/locations-grpc-server' folder
+   using the following command - 'python writer.py'
+3. Modify the location data accordingly in the 'writer.py' file
+4. Run the following GET API - 'http://localhost:30002/api/locations' in POSTMAN to check the newly created location data
