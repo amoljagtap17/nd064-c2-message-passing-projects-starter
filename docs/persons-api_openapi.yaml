@@ -1,0 +1,146 @@
+openapi: 3.0.0
+info:
+  description: API for creating persons
+  version: "1.0.0"
+  title: Persons Service API
+paths:
+  /api/persons:
+    get:
+      summary: Retrieves all Persons
+      description: Retrieves all the Persons
+      responses:
+        "200":
+          description: returns all persons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PersonSchema"
+    post:
+      summary: Adds a new person
+      description: Creates a new person
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PersonSchema"
+        description: Location that needs to be created
+      responses:
+        "200":
+          description: Accepted
+        "400":
+          description: "Invalid input, object invalid"
+  /api/persons/{person_id}:
+    get:
+      summary: Retrieve an location
+      description: By passing in an person_id you can retrieve the person information
+      parameters:
+        - in: path
+          name: person_id
+          schema:
+            type: string
+          required: true
+          description: Unique ID for a given Person
+      responses:
+        "200":
+          description: Successfully return a Person
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PersonSchema"
+        "404":
+          description: Requested Person was not found
+  /api/persons/{person_id}/connection:
+    get:
+      summary: Retrieve connections for a person
+      description: By passing in an person_id you can retrieve the connections information
+      parameters:
+        - in: path
+          name: person_id
+          schema:
+            type: string
+          required: true
+          description: Unique ID for a given Person
+        - name: start_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: distance
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successfully return a connection for person
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConnectionSchema"
+        "404":
+          description: Requested Person was not found
+components:
+  schemas:
+    PersonSchema:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - company_name
+      properties:
+        id:
+          type: string
+          example: 1
+        first_name:
+          type: string
+          example: "John"
+        last_name:
+          type: string
+          example: "Doe"
+        company_name:
+          type: string
+          example: "Big Company"
+    LocationSchema:
+      type: object
+      required:
+        - person_id
+        - longitude
+        - latitude
+        - creation_time
+      properties:
+        id:
+          type: string
+          example: 1
+        person_id:
+          type: integer
+          example: 5
+        longitude:
+          type: string
+          example: "37.5536299999999983"
+        latitude:
+          type: string
+          example: "-122.2908829999999938"
+        creation_time:
+          type: string
+          format: date-time
+          example: "2024-01-29"
+    ConnectionSchema:
+      type: array
+      items:
+        $ref: "#/components/schemas/ConnectionModel"
+    ConnectionModel:
+      type: object
+      properties:
+        person:
+          $ref: "#/components/schemas/PersonSchema"
+        location:
+          $ref: "#/components/schemas/LocationSchema"
