@@ -1,0 +1,15 @@
+I decided to break the monolith into following services:
+
+1. locations-api
+2. persons-api
+3. locations-grpc-server
+
+I used REST for exposing APIs from 'locations-api' and 'persons-api' because it is most common form of message passing.
+
+New Location data is created either from 'locations-api' using REST or from 'locations-grpc-server' using GRPC.
+
+GRPC has built in validations and we don't have to write additional code to validate the messages. 
+GRPC can be preferred over REST as it is fast and leverages HTTP/2 for transporting bindary data.
+
+Kafka is used as Message Queue to handle asynchronous requests while creating new locations.
+Messages from Kafka are processed in 'locations-api'
