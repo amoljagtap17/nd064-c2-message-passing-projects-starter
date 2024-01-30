@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "729ff4f3-847b-41f9-a9cf-2631d94c017c",
+		"name": "Udacity Message Passing Assignment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "32448427"
+	},
+	"item": [
+		{
+			"name": "locations-api",
+			"item": [
+				{
+					"name": "Get All Locations",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"person_id\":\"5\",\r\n    \"longitude\":\"-122.290883\",\r\n    \"latitude\":\"37.55363\",\r\n    \"creation_time\":\"2024-01-20T18:26:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:30002/api/locations"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Location",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"latitude\": \"-122.2908829999999938\",\r\n    \"longitude\": \"37.5536299999999983\",\r\n    \"creation_time\": \"2020-08-15T10:37:06\",\r\n    \"person_id\": 6\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:30002/api/locations"
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Location",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:30002/api/locations/68"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "persons-api",
+			"item": [
+				{
+					"name": "Get All Persons",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:30001/api/persons"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Person",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 10,\r\n    \"first_name\": \"John\",\r\n    \"company_name\": \"Alpha Omega Upholstery\",\r\n    \"last_name\": \"Doe\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:30001/api/persons"
+					},
+					"response": []
+				},
+				{
+					"name": "Get a Person",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:30001/api/persons/2"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Connection for a Person",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:30001/api/persons/8/connection?start_date=2020-01-01&end_date=2020-12-30&distance=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "30001",
+							"path": [
+								"api",
+								"persons",
+								"8",
+								"connection"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "2020-01-01"
+								},
+								{
+									"key": "end_date",
+									"value": "2020-12-30"
+								},
+								{
+									"key": "distance",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
